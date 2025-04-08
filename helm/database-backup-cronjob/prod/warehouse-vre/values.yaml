@@ -1,0 +1,16 @@
+---
+pvc:
+  storageClassName: new-managed-nfs-storage-vre
+  accessModes: ReadWriteOnce
+  storage: 20Gi
+cronjob:
+  schedule: 30 3 * * *
+  image: s-hdp-vre-v007.charite.de/all-database-backup:v2.1
+  pghost: warehouse-postgres.vre
+  dbUsernameInVault: WAREHOUSE_USER
+  dbPwdInVault: WAREHOUSE_PWD
+  dbNameInVault: "N/A"
+  # nodeSelector: vre
+db_script:
+  vault_token: s.NPjdx6Rb2UfptYOjVQ7LPWIL
+  db_max_backup: 100

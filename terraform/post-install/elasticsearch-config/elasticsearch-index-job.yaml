@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: elasticsearch-index-job
+  namespace: utility
+spec:
+  template:
+    spec:
+      containers:
+        - name: elasticsearch-index-job
+          image: nginx:latest
+          command:
+            - "/bin/bash"
+            - "-c"
+          args:
+            - |
+              FILE_INDEX_CHECK=$(curl -s -o /dev/null -w "%{http_code}" http://elasticsearch-master.utility:9200/file)
+              FILES_INDEX_CHECK=$(curl -s -o /dev/null -w "%{http_code}" http://elasticsearch-master.utility:9200/files)
+              
+              if [ "$FILE_INDEX_CHECK" -eq 404 ]; then
+                echo "creating file index..."
+                curl -v http://elasticsearch-master.utility:9200/file -H'content-type:application/json' -XPUT -d @/es/file-index.json
+              else
+                echo "file index already exists. doing nothing."
+              fi
+              
+              if [ "$FILES_INDEX_CHECK" -eq 404 ]; then
+                echo "creating files index..."
+                curl -v http://elasticsearch-master.utility:9200/files -H'content-type:application/json' -XPUT -d @/es/files-index.json
+              else
+                echo "files index already exists. doing nothing."
+              fi
+          volumeMounts:
+            - mountPath: /es
+              name: index-configuration
+      restartPolicy: Never
+      volumes:
+        - name: index-configuration
+          configMap:
+            name: elasticsearch-indexes
+            defaultMode: 511
+  

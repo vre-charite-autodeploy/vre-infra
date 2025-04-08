@@ -1,0 +1,120 @@
+---
+appConfig:
+  env: charite
+  config_center_enabled: false
+  srv_namespace: service_auth
+
+  KEYCLOAK_SERVER_URL: "http://keycloak.utility/vre/auth/"
+  EMAIL_SUPPORT: "vre-support@charite.de"
+  START_PATH: "vre"
+  GUIDE_PATH: "xwiki"
+  EMAIL_ADMIN: "vre-admin@charite.de"
+  EMAIL_HELPDESK: "helpdesk@charite.de"
+  LDAP_URL: "ldap://openldap.utility:389"
+  LDAP_ADMIN_DN: "cn=admin,dc=charite,dc=de"
+  LDAP_OU: "VRE,ou=Charite"
+  LDAP_DC1: "charite"
+  LDAP_DC2: "de"
+
+  RDS_HOST: doesnotexist
+  RDS_PORT: doesnotexist
+  RDS_DBNAME: doesnotexist
+  RDS_USER: doesnotexist
+  RDS_SCHEMA_PREFIX: doesnotexist
+  KEYCLOAK_ID: doesnotexist
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+image:
+  repository: registry.bihealth.org:443/vre/service_auth
+  tag: 131
+  pullPolicy: Always
+
+fullnameOverride: auth
+
+container:
+  port: 5061
+
+service:
+  type: ClusterIP
+  port: 5061
+  targetPort: 5061
+
+extraEnv:
+  LDAPTLS_CACERT: "/tmp/ldapcrt.pem"
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  NEO4J_SERVICE: "http://dataset-neo4j.utility:5062"
+  EMAIL_SERVICE: "http://notification.utility:5065"
+  UTILITY_SERVICE: "http://common.utility:5062"
+  LDAP_objectclass: "group"
+  LDAP_USER_GROUP: "vre-users"
+  KEYCLOAK_GRANT_TYPE: doesnotexist
+  RDS_PWD: doesnotexist
+  RDS_SCHEMA_DEFAULT: doesnotexist
+
+extraEnvYaml:
+  - name: LDAP_ADMIN_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: openldap-admin-credentials
+        key: LDAP_ADMIN_PASSWORD
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+  - name: KEYCLOAK_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: kong-keycloak-client
+        key: secret
+  - name: RDS_DB_URI
+    valueFrom:
+      secretKeyRef:
+        name: opsdb-indoc-vre
+        key: uri
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 700Mi
+  requests:
+    cpu: 100m
+    memory: 700Mi
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  tcpSocket:
+    port: 5061
+
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki
+  - name: vre-pki-root
+    mountPath: /tmp/ldapcrt.pem                                                                                                       │
+    subPath: ca.crt

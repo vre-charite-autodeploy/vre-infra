@@ -1,0 +1,66 @@
+---
+image:
+  repository: ghcr.io/vre-charite/service_approval
+  tag: 0d3d06ef
+  pullPolicy: Always
+
+fullnameOverride: approval
+
+replicaCount: 1
+
+container:
+  port: 8000
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+appConfig:
+  env: "charite"
+  port: 8000
+  config_center_enabled: false
+  config_center_base_url: "http://common.utility:5062/"
+
+extraEnv:
+  CORE_ZONE_LABEL: Core
+  GREEN_ZONE_LABEL: Greenroom
+  NEO4J_SERVICE: "http://dataset-neo4j:5062"
+  DATA_OPS_UTIL: "http://dataops-ut.utility:5063"
+  UTILITY_SERVICE: "http://common.utility:5062"
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+  - name: RDS_DB_URI
+    valueFrom:
+      secretKeyRef:
+        name: opsdb-indoc-vre
+        key: uri
+
+readinessProbe:
+  tcpSocket:
+    port: 8000
+  initialDelaySeconds: 10
+  periodSeconds: 20
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

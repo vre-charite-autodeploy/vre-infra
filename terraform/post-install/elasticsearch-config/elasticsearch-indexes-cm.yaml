@@ -1,0 +1,244 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-indexes
+  namespace: utility
+data:
+  file-index.json: |
+    {
+      "aliases": {},
+      "mappings": {
+        "properties": {
+          "action": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "createdTime": {
+            "type": "float"
+          },
+          "displayName": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "geid": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "operator": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "outcome": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "projectCode": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "resource": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "target": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "upload_message": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      },
+      "settings": {
+        "index": {
+          "number_of_shards": "1",
+          "number_of_replicas": "1"
+        }
+      }
+    }
+
+  files-index.json: |
+    {
+      "aliases": {},
+      "mappings": {
+        "properties": {
+          "archived": {
+            "type": "boolean"
+          },
+          "atlas_guid": {
+            "type": "keyword"
+          },
+          "attributes": {
+            "type": "nested",
+            "properties": {
+              "attribute_name": {
+                "type": "keyword"
+              },
+              "name": {
+                "type": "keyword"
+              },
+              "value": {
+                "type": "keyword"
+              }
+            }
+          },
+          "data_type": {
+            "type": "keyword"
+          },
+          "dcm_id": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "display_path": {
+            "type": "keyword"
+          },
+          "file_name": {
+            "type": "keyword"
+          },
+          "file_size": {
+            "type": "long"
+          },
+          "file_type": {
+            "type": "keyword"
+          },
+          "full_path": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "generate_id": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "location": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "operator": {
+            "type": "text"
+          },
+          "path": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "process_pipeline": {
+            "type": "keyword"
+          },
+          "project_code": {
+            "type": "text"
+          },
+          "system_tags": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "tags": {
+            "type": "keyword"
+          },
+          "time_created": {
+            "type": "date_nanos"
+          },
+          "time_lastmodified": {
+            "type": "date_nanos"
+          },
+          "uploader": {
+            "type": "text"
+          },
+          "version": {
+            "type": "keyword"
+          },
+          "zone": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      },
+      "settings": {
+        "index": {
+          "number_of_shards": "1",
+          "number_of_replicas": "1"
+        }
+      }
+    }

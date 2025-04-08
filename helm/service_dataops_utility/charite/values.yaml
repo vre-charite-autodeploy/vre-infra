@@ -1,0 +1,54 @@
+---
+image:
+  repository: registry.bihealth.org:443/vre/service_dataops_utility
+  tag: 274
+  pullPolicy: Always
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+replicaCount: 1
+
+fullnameOverride: dataops-ut
+
+container:
+  port: 5063
+
+service:
+  type: ClusterIP
+  port: 5063
+  targetPort: 5063
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  MINIO_ENDPOINT: "minio-hl.minio:9000"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+appConfig:
+  env: "charite"
+  port: 5063
+  config_center_enabled: true
+  config_center_base_url: "http://common.utility:5062/"
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

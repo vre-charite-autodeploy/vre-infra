@@ -1,0 +1,95 @@
+---
+appConfig:
+  env: "charite"
+  port: 6063
+  config_center_enabled: false
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+image:
+  repository: ghcr.io/vre-charite-autodeploy/service_pipelinewatch
+  tag: legacy-e40ce57
+  pullPolicy: Always
+
+fullnameOverride: pipelinewatch-k8s-job
+
+replicaCount: 1
+
+container:
+  port: 6063
+
+service:
+  type: ClusterIP
+  port: 6063
+  targetPort: 6063
+
+serviceAccount:
+  create: true
+  name: consumer-serviceaccount
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  KEYCLOAK_ENDPOINT: "http://keycloak.utility:8080/vre/auth/realms/vre/protocol/openid-connect/token"
+  GR_ZONE_LABEL: "Greenroom"
+  CORE_ZONE_LABEL: "Core"
+  DCM_PROJECT_ID: "generate_id"
+
+  QUEUE_SERVICE: "http://queue-producer.greenroom:6060"
+  UTILITY_SERVICE: "http://common.utility:5062"
+  PROVENANCE_SERVICE: "http://provenance.utility:5077"
+  NEO4J_SERVICE: "http://dataset-neo4j.utility:5062"
+  CATALOGUING_SERVICE: "http://cataloguing.utility:5064"
+  ENTITYINFO_SERVICE: "http://entityinfo.utility:5066"
+
+  REDIS_HOST: "redis-master.utility"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+
+  MINIO_OPENID_CLIENT: "react-app"
+  MINIO_ENDPOINT: "minio-hl.minio:9000"
+  MINIO_HTTPS: "TRUE"
+
+  DATA_OPS_GR: "http://dataops-gr.greenroom:5063"
+  DATA_OPS_UTIL: "http://dataops-ut.utility:5063"
+
+  # TODO create a secret with these using random_password
+  MINIO_SECRET_KEY: "adminadmin"
+  MINIO_ACCESS_KEY: "minio_admin"
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-greenroom
+      items:
+        - key: ca.crt
+          path: ca.crt
+  
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+  - name: REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: redis
+        key: redis-password
+
+resources:
+  requests:
+    memory: "500Mi"
+    cpu: "500m"
+  limits:
+    memory: "500Mi"
+    cpu: "500m"
+
+imagePullSecrets:
+  - name: regcred
+    namespace: greenroom

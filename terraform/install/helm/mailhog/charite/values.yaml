@@ -1,0 +1,3 @@
+containerPort:
+  http:
+    port: 8025

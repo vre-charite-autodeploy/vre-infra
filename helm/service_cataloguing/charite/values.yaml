@@ -1,0 +1,73 @@
+---
+appConfig:
+  port: 5064
+  env: charite
+  config_center_enabled: true
+  config_center_base_url: http://common.utility:5062/
+  srv_namespace: service_cataloguing
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+fullnameOverride: cataloguing
+
+image:
+  repository: registry.bihealth.org:443/vre/service_cataloguing
+  tag: 92
+  pullPolicy: Always
+
+container:
+  port: 5064
+
+service:
+  type: ClusterIP
+  port: 5064
+  targetPort: 5064
+
+extraEnv:
+  log_level: info
+  namespace: utility
+  ROOT_PATH: "/data/vre-storage"
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  DCM_PIPELINE_ID: "generate_id"
+  DCM_PIPELINE_ATLAS_TYPE: "generateID"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  tcpSocket:
+    port: 5064
+
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

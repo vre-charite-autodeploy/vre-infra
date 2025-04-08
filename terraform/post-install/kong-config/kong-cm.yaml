@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kong-api-script
+  namespace: utility
+data:
+  configure-kong.sh: |
+    #!/bin/sh
+    create_service() { curl -i -s -X POST http://kong:8001/services --data "name=$1" --data "protocol=http" --data "port=$2" --data "host=$3" ${4:+--data "path=$4"}; }
+
+    create_service "vre-upload-gr" "5079" "upload.greenroom"
+    create_service "admin-api" "8001" "localhost"
+    create_service "vre-file-download" "5063" "dataops-gr.greenroom" "/v1/files/download"
+    create_service "vre-user-invitation" "5060" "bff.utility" "/v1/invitation"
+    create_service "vrecli-bff-api" "5080" "bff-vrecli.utility"
+    create_service "vre-data-operation" "5063" "dataops-gr.greenroom"
+    create_service "vre-user-auth" "5061" "auth.utility" "/v1/users"
+    create_service "vre-test-accounts" "5061" "auth.utility" "/v1/accounts"
+    create_service "vre-user-contact" "5060" "bff.utility" "/v1/contact"
+    create_service "vre-portal-api" "5060" "bff.utility"
+    create_service "vre-user-creation" "5060" "bff.utility" "/v1/users/new"
+    create_service "vre-entityinfo-api" "5066" "entityinfo.utility" "/v1/stats"
+    create_service "vre-download-vre" "5077" "download.vre"
+    create_service "vre-download-gr" "5077" "download.greenroom"
+    create_service "vre-upload-vre" "5079" "upload.vre"
+
+    curl -i -s -X POST http://kong:8001/routes --data "service.name=admin-api" --data "paths[]=/admin-api" --data "protocols[]=htttp" --data "protocols[]=https" --data "path_handling=v0"
+
+    create_route() { curl -i -s -X POST http://kong:8001/routes --data "name=$1" --data "service.name=$2" --data "$3" ${4:+--data "$4"} --data "protocols[]=http" --data "protocols[]=https" --data "path_handling=v1"; }
+
+    create_route "vre-download-gr" "vre-download-gr" "paths[]=/api/vre/portal/download/gr&paths[]=/vre/api/vre/portal/download/gr" "methods[]=GET&methods[]=POST&methods[]=DELETE&methods[]=PUT&methods[]=OPTIONS"
+    create_route "vre-data-operation" "vre-data-operation" "paths[]=/api/vre/portal/dataops&paths[]=/vre/api/vre/portal/dataops" "methods[]=POST&methods[]=GET&methods[]=DELETE"
+    create_route "vre-portal-api" "vre-portal-api" "paths[]=/api/vre/portal&paths[]=/vre/api/vre/portal" "methods[]=GET&methods[]=PUT&methods[]=POST&methods[]=DELETE&methods[]=OPTIONS&methods[]=PATCH"
+    create_route "vre-upload-gr" "vre-upload-gr" "paths[]=/api/vre/upload/gr&paths[]=/vre/api/vre/upload/gr" "methods[]=GET&methods[]=OPTIONS&methods[]=PUT&methods[]=POST&methods[]=DELETE"
+    create_route "vre-user-creation" "vre-user-creation" "paths[]=/api/vre/portal/v1/users/new&paths[]=/vre/api/vre/portal/v1/users/new" "methods[]=POST&methods[]=OPTIONS"
+    create_route "vre-upload-vre" "vre-upload-vre" "paths[]=/api/vre/upload/vre&paths[]=/vre/api/vre/upload/vre" "methods[]=GET&methods[]=POST&methods[]=PUT&methods[]=OPTIONS&methods[]=DELETE"
+    create_route "vre-user-auth" "vre-user-auth" "paths[]=/api/vre/portal/users&paths[]=/vre/api/vre/portal/users" "methods[]=POST&methods[]=PUT&methods[]=GET&methods[]=DELETE&methods[]=OPTIONS"
+    create_route "vre-user-invitation" "vre-user-invitation" "paths[]=/api/vre/portal/v1/invitation&paths[]=/vre/api/vre/portal/v1/invitation" "methods[]=OPTIONS&methods[]=GET"
+    create_route "vre-user-contact" "vre-user-contact" "paths[]=/api/vre/portal/v1/contact&paths[]=/vre/api/vre/portal/v1/contact" "methods[]=POST"
+    create_route "vre-entityinfo-api" "vre-entityinfo-api" "paths[]=/api/vre/portal/v1/stats&paths[]=/vre/api/vre/portal/v1/stats" "methods[]=GET&methods[]=PUT&methods[]=POST&methods[]=DELETE&methods[]=OPTIONS&methods[]=PATCH"
+    create_route "vre-test-accounts" "vre-test-accounts" "paths[]=/api/vre/portal/accounts&paths[]=/vre/api/vre/portal/accounts" "methods[]=GET&methods[]=POST"
+    create_route "vre-download-vre" "vre-download-vre" "paths[]=/api/vre/portal/download/core&paths[]=/vre/api/vre/portal/download/core" "methods[]=GET&methods[]=PUT&methods[]=POST&methods[]=DELETE&methods[]=OPTIONS"
+    create_route "vre-file-download" "vre-file-download" "paths[]=/api/vre/portal/dataops/v1/files/download&paths[]=/vre/api/vre/portal/dataops/v1/files/download" "methods[]=GET&methods[]=OPTIONS"
+    create_route "vrecli-bff-api" "vrecli-bff-api" "paths[]=/api/vrecli" "methods[]=GET&methods[]=POST&methods[]=PUT&methods[]=OPTIONS&methods[]=DELETE"
+    create_route "vrecli-bff-api" "vrecli-bff-api" "paths[]=/api/vrecli" "methods[]=GET&methods[]=POST&methods[]=PUT&methods[]=OPTIONS&methods[]=DELETE"
+
+    curl -i -s -X POST http://kong:8001/plugins --data "name=cors" --data "route.name=vre-upload-vre" --data "config.methods[]=GET" --data "config.methods[]=HEAD" --data "config.methods[]=PUT" --data "config.methods[]=PATCH" --data "config.methods[]=POST" --data "config.methods[]=DELETE" --data "config.methods[]=OPTIONS" --data "config.methods[]=TRACE" --data "config.methods[]=CONNECT"
+    curl -i -s -X POST http://kong:8001/plugins --data "name=cors" --data "route.name=vre-upload-gr" --data "config.methods[]=GET" --data "config.methods[]=HEAD" --data "config.methods[]=PUT" --data "config.methods[]=PATCH" --data "config.methods[]=POST" --data "config.methods[]=DELETE" --data "config.methods[]=OPTIONS" --data "config.methods[]=TRACE" --data "config.methods[]=CONNECT"
+    curl -i -s -X POST http://kong:8001/plugins --data "name=cors" --data "route.name=vre-user-auth" --data "config.methods[]=GET" --data "config.methods[]=HEAD" --data "config.methods[]=PUT" --data "config.methods[]=PATCH" --data "config.methods[]=POST" --data "config.methods[]=DELETE" --data "config.methods[]=OPTIONS" --data "config.methods[]=TRACE" --data "config.methods[]=CONNECT"
+
+    curl -i -s -X POST http://kong:8001/plugins --data "name=file-log" --data "route.name=vre-data-operation" --data "config.path=/tmp/file.log" --data "protocols[]=grpc" --data "protocols[]=grpcs" --data "protocols[]=http" --data "protocols[]=https"
+    curl -i -s -X POST http://kong:8001/plugins --data "name=syslog" --data "route.name=vre-data-operation" --data "config.server_errors_severity=crit" --data "config.successful_severity=notice" --data "config.client_errors_severity=err" --data "config.log_level=info"
+    curl -i -s -X POST http://kong:8001/plugins --data "name=key-auth" --data "service.name=admin-api" --data "config.key_names[]=apikey" --data "config.run_on_preflight=true" --data "config.anonymous=" --data "config.hide_credentials=false" --data "config.key_in_body=false"

@@ -1,0 +1,65 @@
+---
+appConfig:
+  port: 5062
+  env: charite
+  config_center_enabled: true
+  config_center_base_url: http://common.utility:5062/
+  srv_namespace: service_common
+
+fullnameOverride: common
+
+image:
+  repository:  ghcr.io/vre-charite/common
+  tag: latest
+  pullPolicy: Always
+
+container:
+  port: 5062
+
+service:
+  type: ClusterIP
+  port: 5062
+  targetPort: 5062
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  tcpSocket:
+    port: 5062
+
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility

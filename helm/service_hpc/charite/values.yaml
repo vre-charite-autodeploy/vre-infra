@@ -1,0 +1,44 @@
+---
+image:
+  repository: registry.bihealth.org:443/vre/service_hpc
+  tag: 2
+  pullPolicy: Always
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+fullnameOverride: hpc
+
+container:
+  port: 5080
+
+service:
+  type: ClusterIP
+  port: 5080
+  targetPort: 5080
+
+# nodeSelector:
+#   namespace: utility
+
+appConfig:
+  port: 5080
+  env: charite
+  config_center_enabled: true
+  config_center_base_url: http://common.utility:5062/
+  srv_namespace: service_hpc
+
+extraEnv:
+  log_level: info
+  OPEN_TELEMETRY_ENABLED: TRUE
+
+resources:
+  limits:
+    cpu: "0.1"
+    memory: 100Mi
+  requests:
+    cpu: "0.1"
+    memory: 500Mi
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility

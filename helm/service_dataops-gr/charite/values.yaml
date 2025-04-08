@@ -1,0 +1,82 @@
+---
+appConfig:
+  port: 5063
+  env: charite
+  config_center_enabled: true
+  contig_center_base_url: http://common.utility:5062/
+  srv_namespace: service_dataops-gr
+
+image:
+  repository: registry-gitlab.indocresearch.org/pilot/service_dataops_gr
+  tag: 174
+  pullPolicy: Always
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+container:
+  port: 5063
+
+fullnameOverride: dataops-gr
+
+service:
+  type: ClusterIP
+  port: 5063
+  targetPort: 5063
+
+# nodeSelector:
+#   namespace: greenroom
+
+extraEnv:
+  log_level: info
+  namespace: greenroom
+
+# resources:
+#   limits:
+#     cpu: "4"
+#     memory: 32Gi
+#   requests:
+#     cpu: "4"
+#     memory: 32Gi
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  tcpSocket:
+    port: 5063
+
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+extraVolumeMounts:
+  - name: nfsvol
+    mountPath: /data/vre-storage
+    readOnly: false
+  - name: nfsvol-vre-data
+    mountPath: /vre-data
+    readOnly: false
+  - mountPath: /tmp/dataops
+    name: temp-volume
+    readOnly: false
+
+extraVolumes:
+  - name: nfsvol
+    persistentVolumeClaim:
+      claimName: greenroom-storage
+  - name: nfsvol-vre-data
+    nfs:
+      server: bihnas2.charite.de
+      path: /AG-Ritter-VRE/VRE-namespace/vre-vre-data-pvc-ab20736f-3a07-4f3e-bfc9-5c804e6a34d4/
+  - name: temp-volume
+    emptyDir: {}
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility

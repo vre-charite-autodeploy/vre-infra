@@ -1,0 +1,6 @@
+rbac:
+  clusterRole: true
+
+extraEnv:
+  - name: LOG-LEVEL
+    value: "warn"

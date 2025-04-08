@@ -1,0 +1,124 @@
+---
+appConfig:
+  port: 5077
+  env: "charite"
+  config_center_enabled: false
+  srv_namespace: service_download
+  ROOT_PATH: "/data/vre-storage"
+  REDIS_HOST: "redis-master.utility"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+image:
+  repository: ghcr.io/vre-charite-autodeploy/service_download
+  tag: legacy-995d277
+  pullPolicy: Always
+
+fullnameOverride: download
+
+container:
+  port: 5077
+
+service:
+  type: ClusterIP
+  port: 5077
+  targetPort: 5077
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  NEO4J_SERVICE: "http://dataset-neo4j.utility:5062"
+  PROVENANCE_SERVICE: "http://provenance.utility:5077"
+  QUEUE_SERVICE: "http://queue-producer.greenroom:6060"
+  UTILITY_SERVICE: "http://common.utility:5062"
+  DATA_OPS_UTIL: "http://dataops-ut.utility:5063"
+  MINIO_HTTPS: "TRUE"
+  SSL_CERT_FILE: "/etc/vre/pki/ca.crt"
+  namespace: "greenroom"
+  RDS_HOST: "opsdb.utility"
+  RDS_PORT: "5432"
+  RDS_DBNAME: "indoc_vre"
+  RDS_SCHEMA_DEFAULT: "indoc_vre"
+  KEYCLOAK_URL: "http://keycloak.utility/vre/auth/realms/vre/protocol/openid-connect/token"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+  - name: MINIO_ENDPOINT
+    valueFrom:
+      secretKeyRef:
+        name: minio-tenant-credentials
+        key: MINIO_URI_ENDPOINT
+  - name: REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: redis
+        key: redis-password
+  - name: RDS_USER
+    valueFrom:
+      secretKeyRef:
+        name: opsdb-indoc-vre
+        key: username
+  - name: RDS_PWD
+    valueFrom:
+      secretKeyRef:
+        name: opsdb-indoc-vre
+        key: password
+  - name: MINIO_OPENID_CLIENT
+    valueFrom:
+      secretKeyRef:
+        name: minio-keycloak-client
+        key: client-id
+  - name: KEYCLOAK_MINIO_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: minio-keycloak-client
+        key: secret
+  - name: MINIO_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: download-greenroom-minio-app-secrets
+        key: access-key
+  - name: MINIO_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: download-greenroom-minio-app-secrets
+        key: secret-key
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  tcpSocket:
+    port: 5077
+
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: greenroom
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-greenroom
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

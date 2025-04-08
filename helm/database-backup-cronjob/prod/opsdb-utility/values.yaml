@@ -1,0 +1,19 @@
+---
+pvc:
+  storageClassName: managed-nfs-storage-utility
+  accessModes: ReadWriteOnce
+  storage: 20Gi
+cronjob:
+  schedule: 15 3 * * *
+  image: s-hdp-vre-v007.charite.de/database-backup:v2.0
+  pghost: opsdb.utility
+  dbUsernameInVault: RDS_USER
+  dbPwdInVault: RDS_PWD
+  dbNameInVault: RDS_DBNAME
+  # nodeSelector: utility
+db_script:
+  vault_token: s.NPjdx6Rb2UfptYOjVQ7LPWIL
+  db_max_backup: 100
+env:
+  ENV: Prod-OpsDB
+  SLACK_TOKEN: https://hooks.slack.com/services/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

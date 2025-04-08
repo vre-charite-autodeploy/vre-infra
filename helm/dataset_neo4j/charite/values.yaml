@@ -1,0 +1,56 @@
+---
+image:
+  repository: registry.bihealth.org:443/vre/dataset_neo4j
+  tag: 124
+  pullPolicy: Always
+
+fullnameOverride: dataset-neo4j
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+container:
+  port: 5062
+
+service:
+  type: ClusterIP
+  port: 5062
+  targetPort: 5062
+
+appConfig:
+  env: "charite"
+  config_center_enabled: true
+  config_center_base_url: http://common.utility:5062/
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+readinessProbe:
+  tcpSocket:
+    port: 5062
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

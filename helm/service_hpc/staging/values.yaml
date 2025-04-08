@@ -1,0 +1,44 @@
+---
+image:
+  repository: registry-gitlab.indocresearch.org/pilot/service_hpc
+  tag: b8dde60
+  pullPolicy: Always
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+fullnameOverride: hpc
+
+container:
+  port: 5080
+
+service:
+  type: ClusterIP
+  port: 5080
+  targetPort: 5080
+
+# nodeSelector:
+#   namespace: utility
+
+appConfig:
+  port: 5080
+  env: staging
+  config_center_enabled: true
+  config_center_base_url: http://common.utility:5062/
+  srv_namespace: service_hpc
+
+extraEnv:
+  log_level: info
+  OPEN_TELEMETRY_ENABLED: TRUE
+
+resources:
+  limits:
+    cpu: "1"
+    memory: 1000Mi
+  requests:
+    cpu: "0.1"
+    memory: 1000Mi
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility

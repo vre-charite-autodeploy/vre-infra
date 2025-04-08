@@ -1,0 +1,36 @@
+{
+  "branches": ["main"],
+  "repositoryUrl": "https://github.com/vre-charite-dev/vre-infra",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "failComment": false,
+        "releasedLabels": false,
+        "assets": ["CHANGELOG.md", "requirements.txt", "setup.py"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
+        "labels": [
+          "released",
+          "semantic-release",
+          "release-${nextRelease.version}"
+        ]
+      }
+    ]
+  ]
+}

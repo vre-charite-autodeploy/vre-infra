@@ -1,0 +1,39 @@
+---
+image:
+  repository: ghcr.io/vre-charite-autodeploy/frontend_vre_home
+  tag: 168-add-copyright-0553c02
+  pullPolicy: Always
+
+fullnameOverride: vre-home
+
+container:
+  port: 80
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+appConfig:
+  env: "charite"
+
+extraEnv:
+  REACT_APP_ENV: charite
+
+# resources:
+#   requests:
+#     memory: "500Mi"
+#     cpu: "0.5"
+#   limits:
+#     memory: "1000Mi"
+#     cpu: "1"
+
+readinessProbe:
+  tcpSocket:
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility

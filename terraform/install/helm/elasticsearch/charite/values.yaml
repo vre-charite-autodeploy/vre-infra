@@ -1,0 +1,36 @@
+nameOverride: elasticsearch
+
+replicas: 3
+minimumMasterNodes: 1
+
+
+# Allows you to add any config files in /usr/share/elasticsearch/config/
+# such as elasticsearch.yml and log4j2.properties
+esConfig:
+  elasticsearch.yml: |
+    cluster.routing.allocation.disk.threshold_enabled: true
+    cluster.routing.allocation.disk.watermark.flood_stage: 0.9
+    cluster.routing.allocation.disk.watermark.low: 0.6
+    cluster.routing.allocation.disk.watermark.high: 0.8
+
+resources:
+  requests:
+    cpu: "200m"
+    memory: "500Mi"
+  limits:
+    cpu: "400m"
+    memory: "2Gi"
+
+
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  resources:
+    requests:
+      storage: 10Gi
+
+# Hard means that by default pods will only be scheduled if there are enough nodes for them
+# and that they will never end up on the same node. Setting this to soft will do this "best effort"
+antiAffinity: "soft"
+
+clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
+

@@ -1,0 +1,109 @@
+---
+image:
+  repository: ghcr.io/vre-charite-autodeploy/core/bff
+  tag: no_kes
+  pullPolicy: Always
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+fullnameOverride: bff
+
+replicaCount: 1
+container:
+  port: 5060
+  portalPort: 3000
+
+service:
+  type: ClusterIP
+  port: 5060
+  targetPort: 5060
+  portalPort: 3000
+  portalTargetPort: 3000
+
+appConfig:
+  env: "charite"
+  config_center_enabled: true
+  # config center base url is deprecated VAULT_URL environment variable will be used instead
+  # left here to have a valid environment configuration of the deployment
+  config_center_base_url: http://common.utility:5062/
+  EMAIL_SUPPORT: "vre-support@charite.de"
+  EMAIL_ADMIN: "vre-admin@charite.de"
+  EMAIL_HELPDESK: "helpdesk@charite.de"
+  SITE_DOMAIN: "https://vre.charite.de"
+  CORE_ZONE_LABEL: "VRECore"
+  GREENROOM_ZONE_LABEL: "Greenroom"
+  KEYCLOAK_REALM: "vre"
+  KONG_PATH: "/vre/"
+  PROJECT_NAME: "VRE"
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  SSL_CERT_FILE: "/etc/vre/pki/ca.crt"
+  AD_USER_GROUP: "vre-users"
+  AD_PROJECT_GROUP_PREFIX: "vre"
+  LDAP_USER_GROUP: "vre-users"
+  LDAP_objectclass: "group"
+  LDAPTLS_CACERT: "/tmp/ldapcrt.pem"
+  LDAP_URL: "ldap://openldap.utility:389"
+  LDAP_ADMIN_DN: "cn=admin,dc=charite,dc=de"
+  LDAP_OU: "VRE,ou=Charite"
+  LDAP_DC1: "charite"
+  LDAP_DC2: "de"
+
+extraEnvYaml:
+  - name: LDAP_ADMIN_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: openldap-admin-credentials
+        key: LDAP_ADMIN_PASSWORD
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+  - name: MINIO_URI_ENDPOINT
+    valueFrom:
+      secretKeyRef:
+        name: minio-tenant-credentials
+        key: MINIO_URI_ENDPOINT
+  - name: MINIO_TENANT_ROOT_USER
+    valueFrom:
+      secretKeyRef:
+        name: minio-tenant-credentials
+        key: MINIO_TENANT_ROOT_USER
+  - name: MINIO_TENANT_ROOT_PASS
+    valueFrom:
+      secretKeyRef:
+        name: minio-tenant-credentials
+        key: MINIO_TENANT_ROOT_PASS
+
+readinessProbe:
+  tcpSocket:
+    port: 5060
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+command: []
+
+args: []
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki
+  - name: vre-pki-root
+    mountPath: /tmp/ldapcrt.pem                                                                                                       │
+    subPath: ca.crt

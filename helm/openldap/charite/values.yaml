@@ -1,0 +1,108 @@
+global:
+  ldapDomain: "dc=charite,dc=de"
+  ldapPort: 389
+  sslLdapPort: 636
+  existingSecret: openldap-admin-credentials
+
+replicaCount: 1
+
+customSchemaFiles:
+  00-schema-group.ldif: |-
+    dn: cn=samaccountname_group,cn=schema,cn=config
+    objectClass: olcSchemaConfig
+    cn: samaccountname_group
+    olcAttributeTypes: ( 1.2.840.113556.1.4.221
+      NAME 'sAMAccountName'
+      DESC 'Security Account Manager Account Name'
+      EQUALITY caseIgnoreMatch
+      SUBSTR caseIgnoreSubstringsMatch
+      SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+      SINGLE-VALUE )
+    olcObjectClasses: ( 1.2.840.113556.1.5.9
+      NAME 'group'
+      DESC 'Group Object Class'
+      SUP top
+      STRUCTURAL
+      MUST ( cn )
+      MAY ( description $ member $ sAMAccountName ) )
+
+customLdifFiles:
+  00-root.ldif: |-
+    dn: dc=charite,dc=de
+    objectClass: dcObject
+    objectClass: organization
+    o: Charite
+
+  01-ou-charite.ldif: |-
+    dn: ou=Charite,dc=charite,dc=de
+    objectClass: organizationalUnit
+    ou: Charite
+
+  02-ou-vre.ldif: |-
+    dn: ou=VRE,ou=Charite,dc=charite,dc=de
+    objectClass: organizationalUnit
+    ou: VRE
+
+  03-ou-gruppen.ldif: |-
+    dn: ou=Gruppen,ou=VRE,ou=Charite,dc=charite,dc=de
+    objectClass: organizationalUnit
+    ou: Gruppen
+
+  04-ou-users.ldif: |-
+    dn: ou=Users,dc=charite,dc=de
+    objectClass: organizationalUnit
+    ou: Users
+
+  05-gon-vre-users.ldif: |-
+    dn: cn=vre-users,ou=Gruppen,ou=VRE,ou=Charite,dc=charite,dc=de
+    objectClass: group
+    cn: vre-users
+    sAMAccountName: vre-users
+    description: Gruppe für VRE-Projekt sthings
+
+  06-user-jdoe.ldif: |-
+    dn: uid=jdoe,ou=Users,dc=charite,dc=de
+    objectClass: inetOrgPerson
+    objectClass: posixAccount
+    objectClass: top
+    cn: John Doe
+    sn: Doe
+    uid: jdoe
+    uidNumber: 1001
+    gidNumber: 1001
+    homeDirectory: /home/jdoe
+    loginShell: /bin/bash
+    userPassword: {SSHA}gprTucQeJjW+66qAGkmShgQ3IJrwY0ER
+    mail: jdoe@charite.de
+
+replication:
+  enabled: false
+
+persistence:
+  size: 1Gi
+  storageClass: "cinder-csi"
+
+ltb-passwd:
+  ingress:
+    enabled: false
+  ldap:
+    bindDN: "cn=vre-users,dc=charite,dc=de"
+
+phpldapadmin:
+  enabled: false
+  ingress:
+    enabled: false
+
+service:
+  annotations: {}
+  ## If service type NodePort, define the value here
+  #ldapPortNodePort:
+  #sslLdapPortNodePort:
+
+  # Disable if you do not want to expose port on service
+  enableLdapPort: true
+  enableSslLdapPort: true
+
+initTLSSecret:
+  tls_enabled: true
+  secret: openldap

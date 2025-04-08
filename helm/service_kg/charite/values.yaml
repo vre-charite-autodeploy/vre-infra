@@ -1,0 +1,68 @@
+---
+appConfig:
+  env: charite
+  port: 5081
+  config_center_enabled: true
+  config_center_base_url: http://common.utility:5062/
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+image:
+  repository: registry.bihealth.org:443/vre/service_kg
+  tag: 30
+  pullPolicy: Always
+
+fullnameOverride: kg
+
+container:
+  port: 5081
+
+service:
+  type: ClusterIP
+  port: 5081
+  targetPort: 5081
+
+extraEnv:
+  BBN_PROJECT: "VRE_Datasets"
+  BBN_ORG: "charite"
+  BBN_ENDPOINT: "http://nexus-delta.utility:80/kg/v1"
+  KEYCLOAK_ENDPOINT: "/vre/auth/realms/vre/protocol/openid-connect/token"
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+readinessProbe:
+  tcpSocket:
+    port: 5081
+  initialDelaySeconds: 5
+  periodSeconds: 10
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

@@ -1,0 +1,45 @@
+---
+image:
+  pullPolicy: Always
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+fullnameOverride: portal
+
+container:
+  port: 80
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+volumes:
+  name: portal-nginx-conf
+  key: portal.conf
+  mountPath: /etc/nginx/conf.d
+
+appConfig:
+  env: "charite"
+
+extraEnv:
+  REACT_APP_ENV: production
+
+resources:
+  requests:
+    memory: "500Mi"
+    cpu: "200m"
+  limits:
+    memory: "1000Mi"
+    cpu: "1"
+
+readinessProbe:
+  tcpSocket:
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility

@@ -1,0 +1,75 @@
+---
+appConfig:
+  env: "charite"
+  config_center_enabled: true
+  config_center_base_url: "http://common.utility:5062/"
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+image:
+  repository: registry.bihealth.org:443/vre/service_queue/socketio
+  tag: 97
+  pullPolicy: Always
+
+replicaCount: 1
+
+fullnameOverride: queue-socketio
+
+container:
+  port: 6062
+
+service:
+  type: ClusterIP
+  port: 6062
+  targetPort: 6062
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+# volumes:
+#   name: nfsvol
+#   mountPath: /data/vre-storage
+#   claimName: greenroom-storage
+
+resources:
+  requests:
+    memory: "100Mi"
+    cpu: "0.1"
+  limits:
+    memory: "500Mi"
+    cpu: "0.1"
+
+readinessProbe:
+  tcpSocket:
+    port: 6062
+  initialDelaySeconds: 5
+  periodSeconds: 10
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: greenroom
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-greenroom
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

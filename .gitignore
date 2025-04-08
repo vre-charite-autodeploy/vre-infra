@@ -1,0 +1,8 @@
+.envrc
+kubeconfig.yaml
+terraform/**/deploy.tfplan
+terraform/**/.terraform
+terraform/**/*.tfstate
+terraform/**/*.tfstate.*
+terraform/**/*.auto.tfvars
+~

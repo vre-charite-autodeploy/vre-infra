@@ -1,0 +1,68 @@
+{
+    "enumDefs": [],
+    "structDefs": [],
+    "classificationDefs": [],
+    "entityDefs": [
+      {
+        "category": "ENTITY",
+        "guid": "cf8adcbf-63f3-490b-babf-5efc1f60f3ce",
+        "createdBy": "admin",
+        "updatedBy": "admin",
+        "createTime": 1612998687798,
+        "updateTime": 1612998687798,
+        "version": 1,
+        "name": "file_data",
+        "description": "basic file metadata entity",
+        "typeVersion": "1",
+        "serviceType": "hdfs_path",
+        "attributeDefs": [
+          {
+            "name": "name",
+            "typeName": "string",
+            "isOptional": false,
+            "cardinality": "SINGLE",
+            "valuesMinCount": 1,
+            "valuesMaxCount": 1,
+            "isUnique": true,
+            "isIndexable": true,
+            "includeInNotification": false,
+            "searchWeight": 10
+          },
+          {
+            "name": "global_entity_id",
+            "typeName": "string",
+            "isOptional": true,
+            "cardinality": "SINGLE",
+            "valuesMinCount": 0,
+            "valuesMaxCount": 1,
+            "isUnique": true,
+            "isIndexable": true,
+            "includeInNotification": false,
+            "searchWeight": 10
+          }
+        ],
+        "superTypes": ["DataSet"],
+        "subTypes": [],
+        "relationshipAttributeDefs": [
+          {
+            "name": "inputToProcesses",
+            "typeName": "array<Process>",
+            "isOptional": true,
+            "cardinality": "SET",
+            "valuesMinCount": -1,
+            "valuesMaxCount": -1,
+            "isUnique": false,
+            "isIndexable": false,
+            "includeInNotification": false,
+            "searchWeight": -1,
+            "relationshipTypeName": "dataset_process_inputs",
+            "isLegacyAttribute": false
+          }
+        ],
+        "businessAttributeDefs": {}
+      }
+    ],
+    "relationshipDefs": [],
+    "businessMetadataDefs": []
+  }
+  

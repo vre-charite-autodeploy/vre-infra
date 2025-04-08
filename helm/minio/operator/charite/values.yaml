@@ -1,0 +1,12 @@
+###
+# Root key for Operator Helm Chart
+operator:
+  ###
+  # An array of environment variables to pass to the Operator deployment.
+  # Pass an empty array to start Operator with defaults.
+  # See `Operator environment variables <https://github.com/minio/operator/blob/master/docs/env-variables.md>`__ for a list of all supported values.
+  env:
+    - name: OPERATOR_STS_ENABLED
+      value: "on"
+    - name: OPERATOR_STS_AUTO_TLS_ENABLED
+      value: "off"

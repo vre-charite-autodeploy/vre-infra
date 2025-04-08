@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: greenroom
+  name: job-watcher-role
+rules:
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["watch", "get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: job-watcher-binding
+  namespace: greenroom
+subjects:
+  - kind: ServiceAccount
+    name: consumer-serviceaccount
+    namespace: greenroom
+roleRef:
+  kind: Role
+  name: job-watcher-role
+  apiGroup: rbac.authorization.k8s.io

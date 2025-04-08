@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kong-script-job
+  namespace: utility
+spec:
+  template:
+    spec:
+      containers:
+        - image: nginx:latest
+          name: kong-container
+          resources: {}
+          command: ["sh", "-c", "/app/configure-kong.sh"]
+          volumeMounts:
+            - name: kong-script
+              mountPath: "/app"
+              readOnly: true
+      restartPolicy: Never
+      volumes:
+        - name: kong-script
+          configMap:
+            name: kong-api-script
+            defaultMode: 508

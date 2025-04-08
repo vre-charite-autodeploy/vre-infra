@@ -1,0 +1,74 @@
+---
+appConfig:
+  port: 5080
+  env: charite
+  config_center_enabled: true
+  config_center_base_url: http://common.utility:5062/
+  srv_namespace: service_bff-vrecli
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+fullnameOverride: bff-vrecli
+
+image:
+  repository: registry.bihealth.org:443/vre/bff_vrecli
+  tag: 135
+  pullPolicy: Always
+
+container:
+  port: 5080
+
+service:
+  type: ClusterIP
+  port: 5080
+  targetPort: 5080
+
+# nodeSelector:
+#   namespace: utility
+
+extraEnv:
+  log_level: info
+  namespace: utility
+  OPEN_TELEMETRY_ENABLED: "True"
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  tcpSocket:
+    port: 5080
+
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-utility
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

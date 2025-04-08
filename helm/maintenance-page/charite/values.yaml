@@ -1,0 +1,43 @@
+---
+image:
+  repository: registry.bihealth.org:443/vre/core/maintenance-page
+  tag: 1528
+  pullPolicy: Always
+
+replicaCount: 1
+
+fullnameOverride: maintenance-page
+
+container:
+  port: 80
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+# nodeSelector:
+#   namespace: utility
+
+appConfig:
+  env: "charite"
+  port: 80
+  config_center_enabled: false
+
+resources:
+  requests:
+    memory: "100Mi"
+    cpu: "0.1"
+  limits:
+    memory: "200Mi"
+    cpu: "0.5"
+
+readinessProbe:
+  tcpSocket:
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+imagePullSecrets:
+  - name: regcred
+    namespace: utility

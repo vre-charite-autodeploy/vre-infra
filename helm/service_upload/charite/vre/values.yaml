@@ -1,0 +1,88 @@
+---
+appConfig:
+  env: "charite"
+  config_center_enabled: true
+  root_path: "/vre-data"
+
+  redis:
+    host: "redis-master.utility"
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+imagePullSecrets:
+  - name: regcred
+    namespace: vre
+
+image:
+  repository: registry.bihealth.org:443/vre/service_upload
+  tag: 251
+  pullPolicy: Always
+
+fullnameOverride: upload
+
+container:
+  port: 5079
+
+service:
+  type: ClusterIP
+  port: 5079
+  targetPort: 5079
+
+extraEnv:
+  namespace: "vre"
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  NEO4J_SERVICE: "http://dataset-neo4j.utility:5062"
+  ENTITYINFO_SERVICE: "http://entityinfo.utility:5066"
+  QUEUE_SERVICE: "http://queue-producer.greenroom:6060"
+  DATA_OPS_UTIL: "http://dataops-ut.utility:5063"
+  PROVENANCE_SERVICE: "http://provenance.utility:5077"
+  UTILITY_SERVICE: "http://common.utility:5062"
+  MINIO_OPENID_CLIENT: "react-app"
+  MINIO_ENDPOINT: "minio-hl.minio:9000"
+  MINIO_HTTPS: "False"
+  KEYCLOAK_URL: "http://keycloak.utility:8080/vre/auth/realms/vre/protocol/openid-connect/token"
+  DOWNLOAD_TOKEN_EXPIRE_AT: "5"
+  DCM_PIPELINE_ID: "generate_id"
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+
+resources:
+  requests:
+    memory: "100Mi"
+    cpu: "0.1"
+  limits:
+    memory: "500Mi"
+    cpu: "0.1"
+
+readinessProbe:
+  tcpSocket:
+    port: 5079
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+replicaCount: 1
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-vre
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki

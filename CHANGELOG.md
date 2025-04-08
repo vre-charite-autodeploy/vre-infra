@@ -1,0 +1,166 @@
+## [1.0.4](https://github.com/vre-charite-dev/vre-infra/compare/v1.0.3...v1.0.4) (2025-04-09)
+
+
+### Bug Fixes
+
+* **service-auth:** add RDS_SCHEMA_DEFAULT ([#149](https://github.com/vre-charite-dev/vre-infra/issues/149)) ([a333a61](https://github.com/vre-charite-dev/vre-infra/commit/a333a612925538f309dfbe05225343b59305ee39))
+
+## [1.0.3](https://github.com/vre-charite-dev/vre-infra/compare/v1.0.2...v1.0.3) (2025-04-03)
+
+
+### Bug Fixes
+
+* **download-greenroom:** fix dataset-neo4j endpoint url ([cb83e98](https://github.com/vre-charite-dev/vre-infra/commit/cb83e98e5e485d9b80c1fd0666f20a5cad2714fa)), closes [vre-charite-dev/quickstart#210](https://github.com/vre-charite-dev/quickstart/issues/210)
+
+## [1.0.2](https://github.com/vre-charite-dev/vre-infra/compare/v1.0.1...v1.0.2) (2025-04-01)
+
+
+### Bug Fixes
+
+* **vre-infra:** replace vre-charite-dev with github.repository_owner ([#143](https://github.com/vre-charite-dev/vre-infra/issues/143)) ([8625b2f](https://github.com/vre-charite-dev/vre-infra/commit/8625b2f160d145dd6aa3a273651daf08ab5e02bf))
+* **vre-infra:** revert repository url to hardcoded value ([41952d1](https://github.com/vre-charite-dev/vre-infra/commit/41952d1e8ec9ea3b1a96ea29a67f85e176a465f7))
+* **vre-infra:** revert to vre-charite-dev ([4102075](https://github.com/vre-charite-dev/vre-infra/commit/4102075660b7a326ae3ab3f31e09f2bce9f438b4))
+
+## [1.0.1](https://github.com/vre-charite-dev/vre-infra/compare/v1.0.0...v1.0.1) (2025-04-01)
+
+
+### Bug Fixes
+
+* **upload-service:** correct neo4j service endpoint reference ([e265661](https://github.com/vre-charite-dev/vre-infra/commit/e26566147c3c717f6af4d86f7cee338efc47de37)), closes [vre-charite-dev/quickstart#192](https://github.com/vre-charite-dev/quickstart/issues/192)
+
+# 1.0.0 (2025-03-28)
+
+
+### Bug Fixes
+
+* add minio policy script mapper to react-app client ([28706ff](https://github.com/vre-charite-dev/vre-infra/commit/28706fff5be7ea112ca6ff4bc9c97dca8ca2deac))
+* add missing env vars ([c971c73](https://github.com/vre-charite-dev/vre-infra/commit/c971c7331d21f35636122887f6495802da0c9343))
+* add provider to keycloak config ([b973cc7](https://github.com/vre-charite-dev/vre-infra/commit/b973cc7fbbe58e4f0ee9019bdc1a7fe74ad3d117))
+* add vre-admin user, assign platform-admin role and update mapper configs for login ([a719ae5](https://github.com/vre-charite-dev/vre-infra/commit/a719ae56faae6499aed82dfdd42429b1088991bd))
+* add wait and retry logic to postStart lifecycle ([7fbc3a7](https://github.com/vre-charite-dev/vre-infra/commit/7fbc3a74f65def2c52e8e4bf373d1c30ed23b289))
+* added fake vault adress to certificate ([0459276](https://github.com/vre-charite-dev/vre-infra/commit/0459276e2706dd2327b19dfa9d40c720519f0108))
+* added names to ports ([b85b718](https://github.com/vre-charite-dev/vre-infra/commit/b85b71815f45e5bbee1836cfe528c73e94d1b361))
+* added namespace dependency ([064240d](https://github.com/vre-charite-dev/vre-infra/commit/064240d4ccfb7b6178ccd286754b58357481c167))
+* **approval-service:** use 1.2.0 chart version ([20ecb39](https://github.com/vre-charite-dev/vre-infra/commit/20ecb39d4471a1f296428b22f27f37ba5410e7be))
+* atlas credentials setup config mount ([af19cdb](https://github.com/vre-charite-dev/vre-infra/commit/af19cdbc14eec4f23be1aee82256acb98e2f7cc8)), closes [vre-charite-dev/quickstart#106](https://github.com/vre-charite-dev/quickstart/issues/106)
+* **atlas:** health check ([8f1c931](https://github.com/vre-charite-dev/vre-infra/commit/8f1c9316baac2bfa7e1559e6277a71ce81fef06a)), closes [vre-charite-dev/quickstart#185](https://github.com/vre-charite-dev/quickstart/issues/185)
+* **auth-service:** extraEnv configuration ([d830050](https://github.com/vre-charite-dev/vre-infra/commit/d830050945d3b3a10c511b1b7fc220a3a61d751c)), closes [vre-charite-dev/quickstart#67](https://github.com/vre-charite-dev/quickstart/issues/67)
+* **bff:** extraEnv configuration ([58a2fb3](https://github.com/vre-charite-dev/vre-infra/commit/58a2fb37a3177e0ee6a8f33343053a0af02f3a1b)), closes [vre-charite-dev/quickstart#67](https://github.com/vre-charite-dev/quickstart/issues/67)
+* bump notification chart version to use database secret for connection ([8f525cc](https://github.com/vre-charite-dev/vre-infra/commit/8f525cc267d4905e80fa8170927a5fbdcf0b7e63))
+* change fields to string to avoid serialization problems in some services ([#111](https://github.com/vre-charite-dev/vre-infra/issues/111)) ([5e8c7e2](https://github.com/vre-charite-dev/vre-infra/commit/5e8c7e2a9f0eab706d6fe4d7f270721e081c4936))
+* clusterrole is necessary for jaeger to work ([85f1aa6](https://github.com/vre-charite-dev/vre-infra/commit/85f1aa6062c0f4dec59837da5d259a3d4f6490dd))
+* correct minio subjectAltNames, was failing because wrong ([4c51252](https://github.com/vre-charite-dev/vre-infra/commit/4c51252ed470ccde44779f98820bc02fd20da2ef))
+* credentials config volume access mode ([aa508da](https://github.com/vre-charite-dev/vre-infra/commit/aa508daed69ab8a812bc9a41e151c88368fa87ba)), closes [vre-charite-dev/quickstart#106](https://github.com/vre-charite-dev/quickstart/issues/106)
+* **dataset-service:** extraEnv configuration ([f77c6e6](https://github.com/vre-charite-dev/vre-infra/commit/f77c6e643f1d96df2acf42ae2ff4ca7d01d9dddb)), closes [vre-charite-dev/quickstart#67](https://github.com/vre-charite-dev/quickstart/issues/67)
+* db_name is case-sensitive, was causing errors ([211d4b3](https://github.com/vre-charite-dev/vre-infra/commit/211d4b3820d03ddf8a8fa6b58550294bdb123c82))
+* delete  " and $(VERSION) ([1103591](https://github.com/vre-charite-dev/vre-infra/commit/1103591fe694a64580bb6bf5098f518623f89578))
+* deploy rabbitmq from manifest, not helm chart ([bece9eb](https://github.com/vre-charite-dev/vre-infra/commit/bece9eb1a92256ecb96df357abf0588a2442f12c))
+* **download-greenroom:** correct url of neo4j dataset service ([2c9a5c0](https://github.com/vre-charite-dev/vre-infra/commit/2c9a5c0b935bc773ca067890f1305d77f7fb0fa4))
+* **elastic-search:** sharding error & log spam ([78364f9](https://github.com/vre-charite-dev/vre-infra/commit/78364f9c6ff10bf1ff87feb5288f7ca1db3ffad2)), closes [vre-charite-dev/quickstart#126](https://github.com/vre-charite-dev/quickstart/issues/126)
+* enable minio https communication ([23ce926](https://github.com/vre-charite-dev/vre-infra/commit/23ce926e05fda7cbe58154983b0cb361bfba4e34))
+* enabled ssl on Port 443 ([90d6a5e](https://github.com/vre-charite-dev/vre-infra/commit/90d6a5e7aa4b621a35d947a54395c897bbfd59fc))
+* fetch chart from repo w/o local name prefix ([1798b18](https://github.com/vre-charite-dev/vre-infra/commit/1798b18e72d5e9fe993b8f227b5854f275da5257)), closes [#19](https://github.com/vre-charite-dev/vre-infra/issues/19)
+* follow terraform best practice ([31ce160](https://github.com/vre-charite-dev/vre-infra/commit/31ce16058f4488bcf3e165c678c8e9a183cb4ed0))
+* **greenroom+vre:** trust public pki in these namespaces ([114ec91](https://github.com/vre-charite-dev/vre-infra/commit/114ec9121a181030663d0d827cbe84fbd4bfca46))
+* helm values.yaml reference was wrong ([81bcaca](https://github.com/vre-charite-dev/vre-infra/commit/81bcacad3ecc7ed77f8c5253227f76ffc8d72cfa))
+* **install:** certificate trust in utility namespace + minio operator ([6178d8f](https://github.com/vre-charite-dev/vre-infra/commit/6178d8f245f47f561df010065e16816a91d3ee92))
+* **install:** chart versions got messed up during merge ([725ece7](https://github.com/vre-charite-dev/vre-infra/commit/725ece7eb8f8ce76d65a60643cde5c6f8ecbb136))
+* **install:** forgot removing ingress hostname replacements ([2873e60](https://github.com/vre-charite-dev/vre-infra/commit/2873e6099e16ab47728db470b67f3f09892c86ab))
+* **install:** move ingress creation to pre-install ([dd2609d](https://github.com/vre-charite-dev/vre-infra/commit/dd2609d4f3bdac32c625d3f85d8c2a6246ca35e4))
+* **intermediary:** invalid kubernetes manifest resources ([30c43e7](https://github.com/vre-charite-dev/vre-infra/commit/30c43e735f93e12d32494706cd8f27c2976e8665))
+* **keycloak:** key in config maps ([8108e7d](https://github.com/vre-charite-dev/vre-infra/commit/8108e7da25e68c2d00679d831f9dee560e843b5d))
+* **keycloak:** removed duplicate env var causing issues on deploy ([b39ec48](https://github.com/vre-charite-dev/vre-infra/commit/b39ec489679e215b712c4fbf511f59a1fa0e60b1))
+* **kong-job:** convert from octal to decimal ([3ffc0e6](https://github.com/vre-charite-dev/vre-infra/commit/3ffc0e64ae0919502574b833636f97ba1eba1a61))
+* **kong:** missing crd log spam ([671c884](https://github.com/vre-charite-dev/vre-infra/commit/671c884e1bbaf561e864e7936669c8c09d6fb194)), closes [vre-charite-dev/quickstart#85](https://github.com/vre-charite-dev/quickstart/issues/85)
+* **kong:** post-installation procedure ([4e471e6](https://github.com/vre-charite-dev/vre-infra/commit/4e471e663fd76c45a4f2843f6d35e5d314047458))
+* **kong:** repository address ([8f41f9e](https://github.com/vre-charite-dev/vre-infra/commit/8f41f9e1ec142a3ff79945a010cf55f641cac985)), closes [vre-charite-dev/quickstart#85](https://github.com/vre-charite-dev/quickstart/issues/85)
+* make helm charts and images work again ([48d80a9](https://github.com/vre-charite-dev/vre-infra/commit/48d80a96d950732ae91d9f86b120f8cf679be4fc))
+* **message-bus-greenroom:** cpu resource specification ([ba87790](https://github.com/vre-charite-dev/vre-infra/commit/ba87790f6ebe472126769240af13bd23fdb197bb))
+* minio deployment ([48e864d](https://github.com/vre-charite-dev/vre-infra/commit/48e864dd47860b901d0781e3200c9ad4a1a4e9f0)), closes [#19](https://github.com/vre-charite-dev/vre-infra/issues/19)
+* **minio:** secret type of external server cert secret ([ff09664](https://github.com/vre-charite-dev/vre-infra/commit/ff0966473b8bdbe056f4171c7e70bab521276ff8))
+* multi line string ([f26c783](https://github.com/vre-charite-dev/vre-infra/commit/f26c783ddd9606a675d1592d0cdb139c497e6dc7))
+* **neo4j:** credentials must be divided with '/' ([7a98926](https://github.com/vre-charite-dev/vre-infra/commit/7a98926929476d6981eb544019f91cbb6423e7e1))
+* **neo4j:** neo4j namespace doesn't exist ([c3860a5](https://github.com/vre-charite-dev/vre-infra/commit/c3860a5be5dc84f5ee97025c92c37603e7e60547))
+* **observability:** add explicit dependency to prevent wrong deployment order ([#89](https://github.com/vre-charite-dev/vre-infra/issues/89)) ([b34564a](https://github.com/vre-charite-dev/vre-infra/commit/b34564af5b27413a0f4e9401f89185f3d8dcb406))
+* **opsdb:** add missing selector to sts ([5a8cf1c](https://github.com/vre-charite-dev/vre-infra/commit/5a8cf1cba6a4366863096e459fc333976c638139))
+* **opsdb:** change default mode ([03a03ec](https://github.com/vre-charite-dev/vre-infra/commit/03a03ec3c7f97ab6e26bf1d73aaf1172a260fd1d))
+* **pipelinewatch-service:** allow https connection to vault by mounting the pki ([#123](https://github.com/vre-charite-dev/vre-infra/issues/123)) ([a71112a](https://github.com/vre-charite-dev/vre-infra/commit/a71112af68baf41e12111458a4d2028c4b65fc9f)), closes [vre-charite-dev/helm-charts#709cee3](https://github.com/vre-charite-dev/helm-charts/issues/709cee3) [vre-charite-dev/quickstart#170](https://github.com/vre-charite-dev/quickstart/issues/170) [vre-charite-dev/helm-charts#10](https://github.com/vre-charite-dev/helm-charts/issues/10) [vre-charite-dev/service_pipelinewatch#1](https://github.com/vre-charite-dev/service_pipelinewatch/issues/1)
+* **portal:** NS_BINDING_ABORTED error ([3148108](https://github.com/vre-charite-dev/vre-infra/commit/31481084be43a949f5a978b2ce6757ec48001782)), closes [vre-charite-dev/quickstart#83](https://github.com/vre-charite-dev/quickstart/issues/83)
+* **post-install/keycloak:** add tsl_insecure_skip_verify true ([e4348e8](https://github.com/vre-charite-dev/vre-infra/commit/e4348e80386d50d3ad8084aadb70274cc609cf3b))
+* **post-install/keycloak:** add tsl_insecure_skip_verify true ([d62a042](https://github.com/vre-charite-dev/vre-infra/commit/d62a042e804eefb9d3104c04f7dade64b5c7b9d4))
+* **postgres:** can't install without namespace ([dcb4928](https://github.com/vre-charite-dev/vre-infra/commit/dcb4928e3fb145f8a27fed64fe964040e86268c4))
+* **post:** invalid kubernetes manifest resources ([86b09d0](https://github.com/vre-charite-dev/vre-infra/commit/86b09d012ad8beba3b95973872f7630f6715084a))
+* **redis:** do not attempt to create secret as existing secret is used ([58dff76](https://github.com/vre-charite-dev/vre-infra/commit/58dff766db57eb3b9d638376544fb8514af6a32b)), closes [vre-charite-dev/quickstart#127](https://github.com/vre-charite-dev/quickstart/issues/127)
+* **redis:** set redis password in vault config ([f7de125](https://github.com/vre-charite-dev/vre-infra/commit/f7de125b8243073471208ee5a22352839e509d12))
+* **redis:** use self-hosted legacy chart version ([5ec7860](https://github.com/vre-charite-dev/vre-infra/commit/5ec786022f0427ec939041b19a7ec9b7f79c02ba))
+* referencing to secrets ([3f93f4a](https://github.com/vre-charite-dev/vre-infra/commit/3f93f4a8e59f52c3759f736361b72227a95f1c59))
+* removed secret. Token has been revoked ([e29cc70](https://github.com/vre-charite-dev/vre-infra/commit/e29cc70f737d5772f3099c7b83be36caf77aa26b))
+* rename fullnameOverride for dataset_neo4j ([5ad96f7](https://github.com/vre-charite-dev/vre-infra/commit/5ad96f71692b6212306349f1c512eccc4bcde73d))
+* renamed service to reflect fake vault instance ([cd378f3](https://github.com/vre-charite-dev/vre-infra/commit/cd378f3ff6508e1c761ffc9e2ecebb9b319f8f44))
+* renamed step ([19ccaf6](https://github.com/vre-charite-dev/vre-infra/commit/19ccaf6abca85b6c7e9d0676d6f892d28076b16a))
+* renamed workflow ([5cd1d18](https://github.com/vre-charite-dev/vre-infra/commit/5cd1d182700c01223a4434def4df43a039ce94c2))
+* replace remote charts with local charts ([c0b8323](https://github.com/vre-charite-dev/vre-infra/commit/c0b83233abb71df950b6c2139d7c59e5d2ecbce7))
+* service account of pipeline watch ([815a70e](https://github.com/vre-charite-dev/vre-infra/commit/815a70eff03e6fbdc0546b99469817015dfb3007)), closes [#17](https://github.com/vre-charite-dev/vre-infra/issues/17)
+* tell python minio client to use our own pki ([650487b](https://github.com/vre-charite-dev/vre-infra/commit/650487b1d59b0165c2229eadbc42cb92bbc22a0e))
+* the dump uses indoc_vre as user, we'll stick to this mitigating permission issues ([2343eb1](https://github.com/vre-charite-dev/vre-infra/commit/2343eb11e267175c1a9d1284b7d82aa35f0e0bab))
+* tls cert request dns names ([3c1841c](https://github.com/vre-charite-dev/vre-infra/commit/3c1841c0751ec919fe33e5fae1c0af26998dcb52))
+* typo ([096a9ee](https://github.com/vre-charite-dev/vre-infra/commit/096a9ee394a28e14c57753699626a6361958e1e8))
+* update cluster context ([8cc1775](https://github.com/vre-charite-dev/vre-infra/commit/8cc1775adca90ad692c6491a7cd1962e0b0d8214))
+* update default mode access to octal ([50c0706](https://github.com/vre-charite-dev/vre-infra/commit/50c0706687c7593fab71140605d1e2c47d98dd25))
+* update kong chart version, bff app version update ([e26e066](https://github.com/vre-charite-dev/vre-infra/commit/e26e066ea9033d4af0760a04cfed51d1f7710951))
+* update missing pg_pool passwd files ([2abb8be](https://github.com/vre-charite-dev/vre-infra/commit/2abb8bed60d3906dc2defa8539f61137aeaab9f4))
+* use command from dockerfile instead ([bc3e5cb](https://github.com/vre-charite-dev/vre-infra/commit/bc3e5cb5a4f15c89710844a6db1e701fa541d6b2))
+* use correct atlas credentials in services ([ae0fbe8](https://github.com/vre-charite-dev/vre-infra/commit/ae0fbe8677039dc22d037f37e2711c77b94ab53e)), closes [vre-charite-dev/quickstart#107](https://github.com/vre-charite-dev/quickstart/issues/107)
+* use sensitive value of result of minio user password ([77851f9](https://github.com/vre-charite-dev/vre-infra/commit/77851f94ff7924eb299474acbaeb715ab2f5f8f4))
+* **vault:** certificates have changed, we're now using cert-manager ([fff1e5e](https://github.com/vre-charite-dev/vre-infra/commit/fff1e5e221150de3f1c6364220053c35494dd2b0))
+* **vre-home:** ingress was using variables for host ([7c1755c](https://github.com/vre-charite-dev/vre-infra/commit/7c1755cd8faf9f1ee3a22a47f49ae5ff61ef6144))
+* we changed the neo4j-dataset service name ([cc90305](https://github.com/vre-charite-dev/vre-infra/commit/cc90305500899fc316c3734e00a14e6730ba263e))
+* wrong chart name ([4514636](https://github.com/vre-charite-dev/vre-infra/commit/4514636c3726eebc60275684e2be7886fd26835a))
+* wrong event ([ddff7d0](https://github.com/vre-charite-dev/vre-infra/commit/ddff7d0fbbc9b5037b3258ed801791d814decb1c))
+* wrong issuer in Vault server certificate used ([9b47359](https://github.com/vre-charite-dev/vre-infra/commit/9b47359d5294c3e890260b45917be77fa55f5789))
+* wrong uri endpoint, was evaluating to utility namespace ([92d2994](https://github.com/vre-charite-dev/vre-infra/commit/92d2994d8a3677e215700e2209666033f5674547))
+
+
+### Features
+
+* **#53:** make deployment work again ([30fb247](https://github.com/vre-charite-dev/vre-infra/commit/30fb247592f49de1530386e3cbe03d804ddc7e31)), closes [#53](https://github.com/vre-charite-dev/vre-infra/issues/53)
+* add commit lint and semantic release ([e06375e](https://github.com/vre-charite-dev/vre-infra/commit/e06375eead2ea0533f5784a5d1e6dfb84117c1b6))
+* add config map and job yaml files for kong setup automatization ([36e9dc9](https://github.com/vre-charite-dev/vre-infra/commit/36e9dc9c69f3a042e2732521cc0667182c4d6dec))
+* add copyright images ([#139](https://github.com/vre-charite-dev/vre-infra/issues/139)) ([9d020af](https://github.com/vre-charite-dev/vre-infra/commit/9d020af86d33fadf66f90c03e7b5f9ec38212adb))
+* add mailhog to cluster ([dfbbcd7](https://github.com/vre-charite-dev/vre-infra/commit/dfbbcd7304cdad6e31f5eedf69286dd39cacb2a5))
+* add new job dumping notifications db ([3c89c36](https://github.com/vre-charite-dev/vre-infra/commit/3c89c366868e837bda8e51b842ff9a4415baa460))
+* add secrets to configmap for fake vault ([cc1201e](https://github.com/vre-charite-dev/vre-infra/commit/cc1201e3a18a7b45189e7f8a60857a31fe0fa3f1))
+* add terraform fmt check pipeline ([98d8142](https://github.com/vre-charite-dev/vre-infra/commit/98d81424be9b6d40c4d9666b4534705f3151a6d0))
+* add terraform script for minio client integration with keycloak ([ca2a976](https://github.com/vre-charite-dev/vre-infra/commit/ca2a976989827233a13dc1266a445c3e27904cad))
+* added a ngnix server to mimic vault ([9d950c1](https://github.com/vre-charite-dev/vre-infra/commit/9d950c13430bdfdd2f4d1400966c52805aad36fe))
+* added helm chart for cert-manager ([4d76a62](https://github.com/vre-charite-dev/vre-infra/commit/4d76a62966ae9906e9c0c81d044262eb299a94ad))
+* added regcred secret to namespace ([b8afd56](https://github.com/vre-charite-dev/vre-infra/commit/b8afd565dfe3e4de8e585a7464e5ff0aea6064ce))
+* added tls encryption to fake-vault ([17d5cc5](https://github.com/vre-charite-dev/vre-infra/commit/17d5cc524bde0874120a9cd0191c7c7db0bb9fbf))
+* added vault deployment and minimal config ([df4c91a](https://github.com/vre-charite-dev/vre-infra/commit/df4c91ac087c5ad653a827b8d80bfe059c96b0c2))
+* added vault deployment and minimal config ([6738733](https://github.com/vre-charite-dev/vre-infra/commit/6738733e0c07bd045cda183d1dea628afb299bc6))
+* arbitrate atlas admin credentials ([76d003e](https://github.com/vre-charite-dev/vre-infra/commit/76d003ec471ddefbc2f607fab7c5e438d044229b)), closes [vre-charite-dev/quickstart#107](https://github.com/vre-charite-dev/quickstart/issues/107)
+* configure minio tenants to use message bus ([5a6ca71](https://github.com/vre-charite-dev/vre-infra/commit/5a6ca7170ff1ceec55cf25373d63235a173c3e44)), closes [#35](https://github.com/vre-charite-dev/vre-infra/issues/35)
+* **dataset-service:** upgrade to version 1.0.8 ([d4363ee](https://github.com/vre-charite-dev/vre-infra/commit/d4363ee68c8943009907924bac40bac32147e7b9)), closes [vre-charite-dev/quickstart#93](https://github.com/vre-charite-dev/quickstart/issues/93)
+* deploy cert-manager ([fdef1d1](https://github.com/vre-charite-dev/vre-infra/commit/fdef1d142efbbd5e1f5518fc97a03b56046f886d)), closes [#23](https://github.com/vre-charite-dev/vre-infra/issues/23)
+* **fix:** reduce storage needs for minio tenants ([ea0a4c2](https://github.com/vre-charite-dev/vre-infra/commit/ea0a4c289823c92f59961119237137300352b657)), closes [#19](https://github.com/vre-charite-dev/vre-infra/issues/19)
+* implement keycloak 10.0.2 deployment ([ec84e1b](https://github.com/vre-charite-dev/vre-infra/commit/ec84e1b481d66b0650987ae5a9ff033217fc5c8a)), closes [vre-charite-dev/quickstart#58](https://github.com/vre-charite-dev/quickstart/issues/58)
+* implement kong ([5202772](https://github.com/vre-charite-dev/vre-infra/commit/52027726af7f0497d7fcbd7edec4bb91481979a1)), closes [vre-charite-dev/quickstart#58](https://github.com/vre-charite-dev/quickstart/issues/58)
+* Keycloak integration with helm deployment ([3d7b017](https://github.com/vre-charite-dev/vre-infra/commit/3d7b017d070fe408903a907e576856df3e991e89))
+* make run.sh script use dynamic kubeconfig ([628b0e9](https://github.com/vre-charite-dev/vre-infra/commit/628b0e98d98b55f380d8b293b8304a236cf674ed))
+* **makefile:** Add plan and apply steps to makefile ([#110](https://github.com/vre-charite-dev/vre-infra/issues/110)) ([0d48665](https://github.com/vre-charite-dev/vre-infra/commit/0d4866501947b33c7b5902189d2381cbd4433d4d))
+* minio deployment ([9c24b84](https://github.com/vre-charite-dev/vre-infra/commit/9c24b846d0328c0aedf97a1322bbc016c7a550b8)), closes [#19](https://github.com/vre-charite-dev/vre-infra/issues/19)
+* **post-install:** conditionally create kong default mappers ([ae265b5](https://github.com/vre-charite-dev/vre-infra/commit/ae265b53d7d3a25b10755eb440588b3ea9b50e22)), closes [vre-charite-dev/quickstart#139](https://github.com/vre-charite-dev/quickstart/issues/139)
+* **post-install:** configure indexes in elasticsearch ([6d364ff](https://github.com/vre-charite-dev/vre-infra/commit/6d364ffea1534dbaf7d58c1976f8fc799190b7e0)), closes [vre-charite-dev/quickstart#122](https://github.com/vre-charite-dev/quickstart/issues/122)
+* **post-install:** keycloak admin user variable name ([9fbaf27](https://github.com/vre-charite-dev/vre-infra/commit/9fbaf271f01aab64e63ca37c5e1b5dc1e0565fe1)), closes [vre-charite-dev/quickstart#146](https://github.com/vre-charite-dev/quickstart/issues/146)
+* **post-install:** realm management permissions for kong admin-role ([89026ab](https://github.com/vre-charite-dev/vre-infra/commit/89026abd772381738f7b9ef477cea5cb3b75555e)), closes [vre-charite-dev/quickstart#146](https://github.com/vre-charite-dev/quickstart/issues/146)
+* **post-install:** user management permissions for kong admin-role ([c776559](https://github.com/vre-charite-dev/vre-infra/commit/c7765596a41cc4a6af8e7a0fe0a29625b72f0702)), closes [vre-charite-dev/quickstart#150](https://github.com/vre-charite-dev/quickstart/issues/150)
+* **tracing:** add simplest jaeger instance with no persistance layer ([#79](https://github.com/vre-charite-dev/vre-infra/issues/79)) ([5728760](https://github.com/vre-charite-dev/vre-infra/commit/57287608dcbf1046fde2bd986e913248d2b09dfc))
+* **upload-service:** specify redis password in secret ([2a71048](https://github.com/vre-charite-dev/vre-infra/commit/2a71048768be0473a3972f59a84c711fef471c0d))
+* use kubernetes admin secret from previous pipeline step ([f9c4e7e](https://github.com/vre-charite-dev/vre-infra/commit/f9c4e7e7286278888e0fb51699846cd6fac535d1))
+* vault certificate from cert-manager ([6548149](https://github.com/vre-charite-dev/vre-infra/commit/654814979145839ed7a0f01d85eb60ce008dbd54))
+* **vre-home:** add vre-home deployment via helm-chart ([#73](https://github.com/vre-charite-dev/vre-infra/issues/73)) ([2d4352b](https://github.com/vre-charite-dev/vre-infra/commit/2d4352b5cc51872ebefeede893d3a3e4ccb22909))
+
+
+### Reverts
+
+* Revert "feat: implement kong" ([3df66e7](https://github.com/vre-charite-dev/vre-infra/commit/3df66e7004fe19d82a8d7c16e1eb93ba720751c0))

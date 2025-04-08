@@ -1,0 +1,55 @@
+---
+kind: Cluster
+name: vre-vanilla
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  disableDefaultCNI: true
+  kubeProxyMode: none
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.29.4
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+        evictionHard:
+          memory.available: "2Gi"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
+  - role: worker
+    image: kindest/node:v1.29.4
+    kubeadmConfigPatches:
+      - |
+        kind: KubeletConfiguration
+        evictionHard:
+          memory.available: "12Gi"
+    extraMounts:
+      - hostPath: /mnt/data-node1  # Host directory to mount
+        containerPath: /data       # Mount path inside the KinD node
+  - role: worker
+    image: kindest/node:v1.29.4
+    kubeadmConfigPatches:
+      - |
+        kind: KubeletConfiguration
+        evictionHard:
+          memory.available: "12Gi"
+    extraMounts:
+      - hostPath: /mnt/data-node2  # Host directory to mount
+        containerPath: /data       # Mount path inside the KinD node
+  - role: worker
+    image: kindest/node:v1.29.4
+    kubeadmConfigPatches:
+      - |
+        kind: KubeletConfiguration
+        evictionHard:
+          memory.available: "10Gi"
+    extraMounts:
+      - hostPath: /mnt/data-node3  # Host directory to mount
+        containerPath: /data       # Mount path inside the KinD node

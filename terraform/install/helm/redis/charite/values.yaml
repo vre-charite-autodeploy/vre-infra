@@ -1,0 +1,36 @@
+nameOverride: redis
+
+existingSecret: redis
+existingSecretPasswordKey: redis-password
+
+## Cluster settings
+cluster:
+  enabled: true
+  slaveCount: 3
+
+## Prometheus Exporter / Metrics
+##
+metrics:
+  enabled: true
+
+##
+## Redis Master parameters
+##
+master:
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    size: 1Gi
+
+##
+## Redis Slave properties
+## Note: service.type is a mandatory parameter
+## The rest of the parameters are either optional or, if undefined, will inherit those declared in Redis Master
+##
+slave:
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    size: 1Gi

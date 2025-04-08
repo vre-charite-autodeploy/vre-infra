@@ -1,0 +1,24 @@
+## Service parameters
+##
+service:
+  ## @param service.exposeAdmin Add the Kong Admin ports to the service
+  ##
+  exposeAdmin: true
+
+kong:
+  resources:
+    limits:
+      cpu: 150m
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 500Mi
+
+ingress-controller:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 192Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi

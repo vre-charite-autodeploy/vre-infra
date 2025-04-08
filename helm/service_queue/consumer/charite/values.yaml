@@ -1,0 +1,101 @@
+---
+appConfig:
+  env: "charite"
+  config_center_enabled: true
+
+deploymentAnnotations:
+  "sidecar.jaegertracing.io/inject": "true"
+
+image:
+  repository: registry.bihealth.org:443/vre/service_queue/consumer
+  tag: 106
+  pullPolicy: Always
+
+fullnameOverride: queue-consumer
+
+container:
+  port: 6060
+
+serviceAccount:
+  name: consumer-serviceaccount
+
+extraEnv:
+  VAULT_URL: "https://vault.vault:8200/v1/vre/app/config"
+  VAULT_CRT: "/etc/vre/pki/ca.crt"
+  docker_registry_ip: "registry-gitlab.indocresearch.org/pilot/internal_pipelines"
+  KEYCLOAK_ENDPOINT: "http://keycloak.utility:8080/vre/auth/realms/vre/protocol/openid-connect/token"
+  core_mount: "/vre-data"
+  core_volume_name: "nfsvol-vre-data"
+  data_lake: "/data/vre-storage"
+  core_nfs_path: "/AG-Ritter-VRE/VRE-namespace/vre-vre-data-pvc-ab20736f-3a07-4f3e-bfc9-5c804e6a34d4/"
+  core_nfs_server: "bihnas2.charite.de"
+  SQL_DB_NAME: "indoc_vre"
+  GR_ZONE_LABEL: "Greenroom"
+  CORE_ZONE_LABEL: "Core"
+  MINIO_ENDPOINT: "minio-hl.minio:9000"
+  DCM_PROJECT: "generate"
+  DCM_PROJECT_ID: "generate_id"
+  dcmedit_image: "registry-gitlab.indocresearch.org/pilot/internal_pipelines/dcmedit:v0.1"
+  data_transfer_image: "registry-gitlab.indocresearch.org/pilot/internal_pipelines/filecopy:v0.1"
+  bids_validate_image: "registry-gitlab.indocresearch.org/pilot/internal_pipelines/bids-validator:v0.1"
+  gm_queue_endpoint: message-bus-greenroom
+
+extraEnvYaml:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secret
+        key: token
+  - name: gm_username
+    valueFrom:
+      secretKeyRef:
+        key: username
+        name: rabbitmq-credentials
+  - name: gm_password
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: rabbitmq-credentials
+
+# volumes:
+#   name: nfsvol
+#   mountPath: /data/vre-storage
+#   claimName: greenroom-storage
+
+# nfsvolumes:
+#   name: nfsvol-vre-data
+#   server: bihnas2.charite.de
+#   path: /AG-Ritter-VRE/VRE-namespace/vre-vre-data-pvc-ab20736f-3a07-4f3e-bfc9-5c804e6a34d4/
+#   mountPath: /vre-data
+
+replicaCount: 1
+
+resources:
+  requests:
+    memory: "100Mi"
+    cpu: "100m"
+  limits:
+    memory: "500Mi"
+    cpu: "100m"
+
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 33%
+  type: RollingUpdate
+
+imagePullSecrets:
+  - name: regcred
+    namespace: greenroom
+
+extraVolumes:
+  - name: vre-pki-root
+    configMap:
+      name: vre-root-certificate-bundle-greenroom
+      items:
+        - key: ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: vre-pki-root
+    mountPath: /etc/vre/pki
